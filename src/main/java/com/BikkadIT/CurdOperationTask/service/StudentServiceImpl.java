@@ -37,10 +37,13 @@ public class StudentServiceImpl implements StudentServiceI{
 	}
 
 	@Override
-	public Student updateStudent(Student stu) {
+	public boolean updateStudent(Student stu, int rollno) {
 
-		Student save = studentRepositoryI.save(stu);
-		return save;
+ Student save = studentRepositoryI.save(stu);
+		if (save!=null) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -85,6 +88,15 @@ public class StudentServiceImpl implements StudentServiceI{
 		return false;
 	}
 
+	@Override
+public List<Student> updateAllStudent(List<Student> stu, List<Integer> rollno) {
+
+		List<Student> save = studentRepositoryI.saveAll(stu);
+		
+		return save;
+	}
+
+	
 
 
 
@@ -96,3 +108,4 @@ public class StudentServiceImpl implements StudentServiceI{
 	 */
 
 }
+

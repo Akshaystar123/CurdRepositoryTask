@@ -16,7 +16,9 @@ public interface StudentServiceI {
 	
 	public List<Student> findByAllId(List<Integer> rollno);
 
-	public Student updateStudent(Student stu);
+	public boolean updateStudent(Student stu, int rollno);
+	
+	public List<Student> updateAllStudent(List<Student> stu, List<Integer> rollno);
 
 	public Student deleteStudent(int rollno);
 

@@ -3,7 +3,10 @@ package com.BikkadIT.CurdOperationTask.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.BikkadIT.CurdOperationTask.entities.Student;
 import com.BikkadIT.CurdOperationTask.service.StudentServiceI;
 
-import jakarta.websocket.server.PathParam;
 
 @RestController
 public class StudentController {
@@ -108,21 +110,42 @@ public class StudentController {
 
 	// ******************************update single record Record**************************************
 
-	@PutMapping("/updateStudent")
-	public ResponseEntity<Student> updateStudent(@RequestBody Student stu) {
+	@PutMapping("/updateStudent/{rollno}")
+	public ResponseEntity<String> updateStudent(@RequestBody Student stu, @PathVariable int rollno) {
 
-		Student updateStudent = studentServiceI.updateStudent(stu);
-		return new ResponseEntity<Student>(updateStudent, HttpStatus.OK);
+		boolean updateStudent = studentServiceI.updateStudent(stu,rollno);
+		
+		if(updateStudent) {
+			
+			String msg="Student update successfully";
+		return new ResponseEntity<String>(msg,HttpStatus.CREATED);
+	}else {
+		String msg="Student is not save successfully";
+		return new ResponseEntity<String>(msg,HttpStatus.BAD_REQUEST);
+	}
 	}
 
 	// ******************************update multiple record at time**************************************
 
-	@PostMapping("/student/updateAll")
-	public List<Student> updateAll(@RequestBody List<Student> stu) {
+	@PutMapping("/student/updateAll/{rollno}")
+	public ResponseEntity<String> updateAll(@RequestBody List<Student> stu, @PathVariable List<Integer> rollno) {
 
-		List<Student> saveAll = studentServiceI.saveAll(stu);
+	
 
-		return saveAll;
+	 try {
+		 List<Student> updateAllStudent = studentServiceI.updateAllStudent(stu, rollno);
+		 String msg="student updated successfully";
+
+		 return  new ResponseEntity<String>(msg,HttpStatus.CREATED);
+		 
+	} catch (Exception e) {
+		
+		e.printStackTrace();
+		String msg="Student not updated successfully";
+		return new  ResponseEntity<String>(msg,HttpStatus.BAD_REQUEST);
+		
+	}
+		
 	}
 
 	// ******************************delete Single record**************************************
